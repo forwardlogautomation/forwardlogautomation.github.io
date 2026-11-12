@@ -496,9 +496,10 @@ var INFO = {
   presales: { name: 'Presales Pipeline', desc: 'Presales projects from first lead to handover: stages, updates and next steps.' },
   progress: { name: 'Progress Reports', desc: 'Project milestones, site updates with photos, and printable status reports.' },
   'solution-calc': { name: 'Solution Calc', desc: 'AIRROB, 4WS, APR and wheel sorter estimates, saved per project.' },
-  sortcheck: { name: 'SortCheck', desc: 'Check sorting results against orders, wave by wave, with reports to Drive.' }
+  sortcheck: { name: 'SortCheck', desc: 'Check sorting results against orders, wave by wave, with reports to Drive.' },
+  issues: { name: 'Issue Log', desc: 'Project issues and action plans per client, in English and 中文, with Excel and PDF export.' }
 };
-var ORDER = ['presales', 'progress', 'solution-calc', 'sortcheck'];
+var ORDER = ['presales', 'progress', 'solution-calc', 'sortcheck', 'issues'];
 var S = { d: null };
 function titleOf(k) { return (INFO[k] && INFO[k].name) || k.replace(/-/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }); }
 function healthTxt(h) {
