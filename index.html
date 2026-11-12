@@ -510,6 +510,7 @@ var INFO = {
   issues: { name: 'Issue Log', desc: 'Project issues and action plans per client, in English and 中文, with Excel and PDF export.' }
 };
 var ORDER = ['presales', 'progress', 'solution-calc', 'sortcheck', 'issues'];
+var CLOSED = ['issues'];   // portals switched off for now: no tile even if the control centre still lists them
 var S = { d: null };
 function titleOf(k) { return (INFO[k] && INFO[k].name) || k.replace(/-/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }); }
 function healthTxt(h) {
@@ -519,7 +520,7 @@ function healthTxt(h) {
 function render() {
   var d = S.d; if (!d) return;
   var first = (_auth && _auth.name ? _auth.name : userName(d.email)).split(' ')[0];
-  var list = d.portals.slice().sort(function (a, b) { var i = ORDER.indexOf(a.key), j = ORDER.indexOf(b.key); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j); });
+  var list = d.portals.filter(function (p) { return CLOSED.indexOf(p.key) < 0; }).sort(function (a, b) { var i = ORDER.indexOf(a.key), j = ORDER.indexOf(b.key); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j); });
   var h = '<div class="tb"><span class="bar"></span><div><div class="eb">Forwardlog Automation</div><h1>Portals</h1><p>Hi ' + esc(first) + ', pick a portal. You see the ones you have access to.</p></div></div>';
   if (!list.length) h += '<div class="empty">You don\'t have access to any portal yet. Ask an admin to add you in Settings.</div>';
   else h += '<div class="tiles">' + list.map(function (p, n) {
