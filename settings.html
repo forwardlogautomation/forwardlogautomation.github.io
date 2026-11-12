@@ -359,7 +359,7 @@ function goTab(tab, p) {
   if (location.hash !== h) location.hash = h; else render();
 }
 window.addEventListener('hashchange', function () { readHash(); ls('ad_tab', A.tab); if (A.ptab) ls('ad_ptab', A.ptab); if (A.data) render(); });
-var PORTAL_NAME = { presales: 'Presales', progress: 'Progress', sortcheck: 'SortCheck', 'solution-calc': 'Solution Calc', all: 'All portals' };
+var PORTAL_NAME = { presales: 'Presales', progress: 'Progress', sortcheck: 'SortCheck', 'solution-calc': 'Solution Calc', issues: 'Issue Log', all: 'All portals' };
 var ROLE_OPTS = [['', 'Default'], ['allow', 'Allowed'], ['admin', 'Admin'], ['block', 'Blocked']];
 var KNOWN_SETTINGS = [
   ['all', 'accessMode', 'Who can use the portal: "domain" = anyone @forwardlogauto.com (default), "listed" = only people marked Allowed or Admin. Can also be set per portal.'],
