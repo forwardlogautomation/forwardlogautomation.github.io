@@ -121,6 +121,20 @@ a.tile:focus-visible{outline:3px solid rgba(95,122,97,.35);outline-offset:2px}
 .ftag .ln{flex:1;height:3px;background:var(--fl)}
 .ftag .bx{background:var(--fl);color:#fff;font-weight:700;font-size:12.5px;padding:8px 14px;letter-spacing:.3px}
 @media (max-width:520px){.tb h1{font-size:24px}.tiles{grid-template-columns:1fr}a.tile{min-height:0}}
+/* portal tiles: own icon, lift on hover/tap, staggered entrance */
+a.tile{position:relative;overflow:hidden;transition:border-color .2s,transform .2s ease,box-shadow .2s ease;box-shadow:0 1px 2px rgba(0,0,0,.04);animation:tile-in .45s ease both;animation-delay:calc(var(--n,0) * 70ms)}
+a.tile:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(40,60,45,.14)}
+a.tile:active{transform:translateY(-1px) scale(.985);box-shadow:0 4px 12px rgba(40,60,45,.12)}
+a.tile::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--mx,85%) var(--my,0%),rgba(95,122,97,.10),transparent 55%);opacity:0;transition:opacity .25s;pointer-events:none}
+a.tile:hover::after{opacity:1}
+.tile .th{display:flex;align-items:center;gap:12px}
+.tile .ti{flex:0 0 56px;width:56px;height:56px;border-radius:13px;box-shadow:0 2px 6px rgba(40,60,45,.15);transition:transform .25s cubic-bezier(.34,1.56,.64,1);background:#fff}
+a.tile:hover .ti{transform:scale(1.08) rotate(-3deg)}
+.tile .go{transition:transform .2s ease}
+a.tile:hover .go{transform:translateX(4px)}
+.side>div{flex:1 1 180px}.side .si{flex:0 0 44px;width:44px;height:44px;border-radius:11px;box-shadow:0 2px 6px rgba(40,60,45,.15)}
+@keyframes tile-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){a.tile{animation:none;transition:border-color .2s}a.tile:hover,a.tile:active{transform:none}a.tile:hover .ti,a.tile:hover .go{transform:none}}
 </style>
 </head>
 <body>
@@ -497,13 +511,17 @@ function render() {
   var list = d.portals.slice().sort(function (a, b) { var i = ORDER.indexOf(a.key), j = ORDER.indexOf(b.key); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j); });
   var h = '<div class="tb"><span class="bar"></span><div><div class="eb">Forwardlog Automation</div><h1>Portals</h1><p>Hi ' + esc(first) + ', pick a portal. You see the ones you have access to.</p></div></div>';
   if (!list.length) h += '<div class="empty">You don\'t have access to any portal yet. Ask an admin to add you in Settings.</div>';
-  else h += '<div class="tiles">' + list.map(function (p) {
+  else h += '<div class="tiles">' + list.map(function (p, n) {
     var i = INFO[p.key] || {};
-    return '<a class="tile" href="' + esc(p.url || ('/' + p.key + '/')) + '"><div class="tn">' + esc(titleOf(p.key)) + (p.admin ? '<span class="role">Admin</span>' : '') + '</div>' +
+    return '<a class="tile" style="--n:' + n + '" href="' + esc(p.url || ('/' + p.key + '/')) + '"><div class="th">' +
+      '<img class="ti" alt="" src="/' + esc(p.key) + '/icon-180.png" onerror="this.style.display=\'none\'">' +
+      '<div class="tn">' + esc(titleOf(p.key)) + (p.admin ? '<span class="role">Admin</span>' : '') + '</div></div>' +
       '<div class="td">' + esc(i.desc || '') + '</div><div class="tf"><span>' + healthTxt(p.health) + '</span><span class="go">Open →</span></div></a>';
   }).join('') + '</div>';
-  if (d.admin) h += '<div class="side"><div><b>Settings</b><span>Who can open each portal, admins, health checks and shortcuts. Only admins see this.</span></div><a class="btn" href="settings.html">Open settings</a></div>';
+  if (d.admin) h += '<div class="side"><img class="si" alt="" src="icon-180.png"><div><b>Settings</b><span>Who can open each portal, admins, health checks and shortcuts. Only admins see this.</span></div><a class="btn" href="settings.html">Open settings</a></div>';
   $('#main').innerHTML = h;
+  // soft glow follows the pointer on each tile
+  $$('a.tile').forEach(function (a) { a.addEventListener('pointermove', function (e) { var r = a.getBoundingClientRect(); a.style.setProperty('--mx', (e.clientX - r.left) + 'px'); a.style.setProperty('--my', (e.clientY - r.top) + 'px'); }); });
 }
 function run(cachedOnly) {
   var c = cacheGet('portals'); if (c && !S.d) { S.d = c; render(); }
