@@ -125,6 +125,16 @@ header.top.wide{padding-left:12px;padding-right:12px}
 .btn.sec.bad{background:var(--bad-bg);color:var(--bad)} .row .hs{flex:0 0 auto}
 .chips .chip{margin-top:2px}
 </style>
+<style id="fl-wide">
+/* FL-WIDE v1: on a computer (761px and wider) every portal uses the full width from the left edge,
+   lined up with the logo; no centred column. Phones are unchanged. */
+@media (min-width:761px){
+  main,main.hub,main.wide,.wrap,.topbar-in{max-width:none!important;margin-left:0!important;margin-right:0!important}
+  .actionbar{padding-left:12px!important;padding-right:12px!important}
+  .fab{right:14px!important}
+  .ftag{max-width:none!important;margin-left:0!important;margin-right:0!important}
+}
+</style>
 </head><body>
 <script>window.FL_LOADER={"app":"Forwardlog Automation · Settings","quiet":[],"messages":{"getAll":"Loading…","checkHealth":"Checking the portals…"}}</script>
 <!-- FL-LOADER v2: Forwardlog loading signs (splash, top bar, button spinner, long-job card). Paste right after <body>. -->
